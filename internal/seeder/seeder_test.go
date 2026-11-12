@@ -53,3 +53,4 @@ func TestSeedApplicants(t *testing.T) {
 		assert.Equal(t, int64(10), count)
 	})
 }
+

@@ -143,3 +143,4 @@ func SeedApplicants(db *gorm.DB) error {
 	log.Printf("[Seeder] Successfully seeded %d mock applicant records into database.\n", len(applicants))
 	return nil
 }
+
