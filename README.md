@@ -7,11 +7,11 @@
 [![Swagger](https://img.shields.io/badge/Swagger-OpenAPI_3.0-85EA2D?style=flat&logo=swagger)](http://localhost:8080/swagger/index.html)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Backend RESTful API untuk pengelolaan berkas dan proses rekrutmen pelamar kerja (*Applicant Records*), dirancang dan dibangun untuk **Mini Assignment Back-End Engineer Sekolah Karir Batch 2**.
+Backend RESTful API untuk pengelolaan data dan proses rekrutmen pelamar kerja (*Applicant Records*), dirancang dan dibangun untuk **Mini Assignment Back-End Engineer Sekolah Karir Batch 2**.
 
 ---
 
-## 📋 Informasi Kandidat & Pengumpulan
+## Informasi Kandidat
 
 - **Nama Kandidat**: Lesmana Adh Kusuma
 - **Applicant ID**: SKR26-0005
@@ -21,9 +21,9 @@ Backend RESTful API untuk pengelolaan berkas dan proses rekrutmen pelamar kerja 
 
 ---
 
-## 🎯 Ringkasan Solusi & Fitur Utama
+## Ringkasan Proyek & Fitur Utama
 
-API ini dibangun dengan fokus pada **kualitas reasoning**, **kejelasan arsitektur (clean design)**, serta **kemudahan eksekusi**:
+Layanan ini dibangun dengan mengutamakan **kualitas reasoning**, **kejelasan arsitektur (clean layered design)**, dan **keandalan sistem**:
 
 1. **Create Applicant Record**:
    - Pendaftaran pelamar dengan validasi format email, nomor telepon, nama, dan posisi.
@@ -31,35 +31,36 @@ API ini dibangun dengan fokus pada **kualitas reasoning**, **kejelasan arsitektu
    - Otomatis meng-generate **UUID v4** untuk keamanan identifikasi (mencegah *ID enumeration / scraping*).
    - Inisialisasi tahapan default secara konsisten: `APPLIED`.
 2. **List Applicants (Query, Filter & Search)**:
-   - Dukungan **Pagination** (`page`, `limit`) dengan pagination metadata lengkap (`total_records`, `total_pages`, `page`, `limit`).
-   - **Filter by Stage** (`stage=INTERVIEW`, `stage=APPLIED`, dll).
+   - Dukungan **Pagination** (`page`, `limit`) dengan metadata paginasi lengkap (`total_records`, `total_pages`, `page`, `limit`).
+   - **Filter by Stage** (`stage=INTERVIEW`, `stage=APPLIED`, dan enum lainnya).
    - **Filter by Position** (`position=Back-End` - *case-insensitive substring match*).
    - **Keyword Search** (`search=lesmana` - mencakup kolom nama dan email).
 3. **Update Applicant Stage**:
    - Pembaruan tahapan rekrutmen dengan validasi *Allowed Enum Stages*.
-   - Pencatatan catatan/alasan perubahan tahap rekrutmen (*recruitment notes*).
+   - Pencatatan catatan atau alasan perubahan tahap rekrutmen (*recruitment notes*).
    - Mengembalikan `400 Bad Request` jika stage di luar daftar enum yang diizinkan.
 4. **Get Applicant Detail by ID**:
    - Pengambilan detail informasi pelamar berdasarkan UUID.
 5. **System Health Check**:
-   - Endpoint `/health` untuk liveness probe / monitoring status service.
-6. **Dokumentasi Lengkap**:
-   - **Interactive Swagger UI**: Tersedia langsung saat server berjalan di `/swagger/index.html`.
-   - **Postman Collection v2.1**: Siap import di folder `postman/`.
+   - Endpoint `/health` untuk liveness probe dan monitoring kesiapan service.
+6. **Dokumentasi & Testing**:
+   - **Interactive Swagger UI**: Terintegrasi pada route `/swagger/index.html`.
+   - **Postman Collection v2.1**: Tersedia di direktori `postman/`.
+   - **Automated Tests**: Unit test dan integration test dengan code coverage tinggi.
 
 ---
 
-## 🏗️ Desain & Arsitektur Sistem
+## Arsitektur Sistem
 
-Proyek ini mengadopsi **Clean / Layered Architecture** dengan *Dependency Injection* dan pemisahan tanggung jawab (*Separation of Concerns*):
+Proyek ini menerapkan **Clean / Layered Architecture** dengan prinsip *Separation of Concerns* dan *Dependency Injection*:
 
 ```
 sekolah-karir-mini-assigment/
 ├── cmd/
 │   └── api/
-│       └── main.go                 # Entrypoint aplikasi, inisialisasi router & dependency injection
+│       └── main.go                 # Entrypoint server & router wiring
 ├── config/
-│   └── database.go                 # Konfigurasi SQLite CGO-free & AutoMigrate GORM
+│   └── database.go                 # Inisialisasi SQLite CGO-free & GORM AutoMigrate
 ├── docs/                           # Swagger/OpenAPI generated files (swaggo)
 │   ├── docs.go
 │   ├── swagger.json
@@ -69,11 +70,11 @@ sekolah-karir-mini-assigment/
 │   │   ├── applicant_handler.go    # HTTP Controller, request binding, error mapping
 │   │   └── applicant_handler_test.go # Integration tests untuk HTTP endpoints (httptest)
 │   ├── model/
-│   │   ├── applicant.go            # Entitas Domain & definisi Stage Enum
+│   │   ├── applicant.go            # Domain entity & Stage Enum
 │   │   └── dto.go                  # Request/Response Data Transfer Objects (DTO)
 │   ├── repository/
-│   │   ├── applicant_repository.go # Data access layer (interface & implementasi GORM)
-│   │   └── applicant_repository_test.go # Unit test layer database
+│   │   ├── applicant_repository.go # Data access layer (interface & GORM)
+│   │   └── applicant_repository_test.go # Unit test database repository
 │   └── service/
 │       ├── applicant_service.go    # Business logic, validasi aturan bisnis, lifecycle
 │       └── applicant_service_test.go # Unit test layer service
@@ -88,7 +89,7 @@ sekolah-karir-mini-assigment/
 └── README.md
 ```
 
-### 1. Data Flow
+### Data Flow
 
 ```mermaid
 flowchart LR
@@ -98,7 +99,7 @@ flowchart LR
     Repository -->|SQL Queries| DB[(SQLite Database)]
 ```
 
-### 2. Recruitment Stage Lifecycle
+### Recruitment Stage Lifecycle
 
 Tahapan rekrutmen (*Stages*) yang didukung:
 
@@ -129,7 +130,7 @@ Daftar Enum Stage:
 
 ---
 
-## 🛠️ Tech Stack & Keputusan Teknologi
+## Tech Stack & Keputusan Desain
 
 | Komponen | Pilihan | Alasan Pemilihan |
 |---|---|---|
@@ -137,12 +138,12 @@ Daftar Enum Stage:
 | **HTTP Framework** | Gin Web Framework | Performa tinggi (HttpRouter), middleware ecosystem luas, binding & validation terintegrasi. |
 | **ORM** | GORM | Standar industri di ekosistem Go, mempermudah query building yang aman dari SQL injection, dan otomatis mengelola timestamps. |
 | **Database** | SQLite (`glebarez/sqlite`) | Menggunakan driver **pure Go (CGO-free)**. Tidak membutuhkan C-compiler (MinGW/GCC) sehingga berjalan mulus di Windows, Linux, maupun macOS, sekaligus data tersimpan persisten secara lokal. |
-| **Identifier** | UUID v4 (`google/uuid`) | Menghindari ID enumeration / scraping attacks pada data pelamar, aman untuk sistem berskala enterprise. |
-| **API Documentation** | Swaggo (OpenAPI 3.0) + Postman | Penguji dapat langsung mencoba endpoint melalui web UI interaktif tanpa alat tambahan. |
+| **Identifier** | UUID v4 (`google/uuid`) | Menghindari ID enumeration / scraping attacks pada data pelamar, aman untuk sistem skala enterprise. |
+| **API Documentation** | Swaggo (OpenAPI 3.0) + Postman | Penguji dapat langsung mencoba endpoint melalui web UI interaktif tanpa dependensi tools tambahan. |
 
 ---
 
-## 🚀 Panduan Menjalankan Aplikasi
+## Panduan Menjalankan Aplikasi
 
 ### Prasyarat:
 - Pastikan telah menginstal [Go](https://go.dev/dl/) versi 1.21 ke atas.
@@ -152,7 +153,7 @@ Daftar Enum Stage:
 
 ### 1. Menjalankan Server API
 
-Clone atau ekstrak repository, buka terminal di folder proyek, lalu jalankan:
+Clone atau unduh repository, buka terminal di folder proyek, lalu jalankan:
 
 ```bash
 # Menjalankan aplikasi
@@ -169,14 +170,14 @@ Output log pada terminal:
 ==================================================
 ```
 
-Server aktif di port `8080`. File database `applicants.db` akan dibuat secara otomatis.
+Server aktif di port `8080`. File database `applicants.db` akan dibuat secara otomatis di root folder.
 
 ---
 
 ### 2. Mengakses Dokumentasi Interaktif (Swagger UI)
 
 Buka peramban (browser) dan akses:
-👉 **[http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)**
+**[http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)**
 
 Dari halaman ini Anda dapat mengecek spesifikasi skema data serta menguji seluruh endpoint secara langsung (*Try it out*).
 
@@ -215,7 +216,7 @@ ok  	github.com/lesmana/sekolah-karir-applicant-api/internal/service
 
 ---
 
-## 📖 Dokumentasi Endpoint & Contoh cURL
+## Dokumentasi Endpoint & Contoh cURL
 
 Format response standar mengadopsi struktur envelope yang konsisten:
 - `success` (boolean): Menandakan status operasi.
@@ -446,12 +447,12 @@ curl -X PATCH http://localhost:8080/api/v1/applicants/e81d89b1-0428-4e1b-8535-97
 
 ---
 
-## 🤖 Catatan Penggunaan AI (AI & Tools Disclosure)
+## Catatan Penggunaan AI (AI & Tools Disclosure)
 
 Sesuai ketentuan brief submission **Sekolah Karir**:
-> *"Kamu boleh menggunakan AI tools, internet references, coding/design assistants, atau tools lain yang relevan. Jika menggunakan AI, tambahkan catatan singkat berisi tool yang digunakan dan bagaimana tool tersebut membantu."*
+> "Kamu boleh menggunakan AI tools, internet references, coding/design assistants, atau tools lain yang relevan. Jika menggunakan AI, tambahkan catatan singkat berisi tool yang digunakan dan bagaimana tool tersebut membantu."
 
-Berikut catatan keterbukaan penggunaan alat bantu selama pengerjaan assignment ini:
+Berikut catatan transparansi penggunaan alat bantu selama pengerjaan assignment ini:
 
 1. **Google Antigravity AI Assistant**:
    - Digunakan sebagai *collaborative thinking partner* melalui mekanisme interview terstruktur (`/grill-me` dan `/plan`) untuk membedah persyaratan teknis, mengeksplorasi trade-off arsitektur (misal: pemilihan driver SQLite CGO-free vs database/sql), dan merumuskan skema pengujian yang menyeluruh.
@@ -461,6 +462,6 @@ Berikut catatan keterbukaan penggunaan alat bantu selama pengerjaan assignment i
 
 ---
 
-## 📄 Lisensi
+## Lisensi
 
 Proyek ini dibuat untuk keperluan seleksi kerja Sekolah Karir dan dilisensikan di bawah lisensi [MIT](LICENSE).
