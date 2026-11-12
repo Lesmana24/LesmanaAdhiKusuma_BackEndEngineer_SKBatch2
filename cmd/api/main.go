@@ -1,10 +1,15 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"flag"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lesmana/sekolah-karir-applicant-api/config"
@@ -96,14 +101,48 @@ func main() {
 		port = "8080"
 	}
 
-	log.Printf("==================================================")
-	log.Printf(" Applicant Records API is running on port %s", port)
-	log.Printf(" Swagger UI: http://localhost:%s/swagger/index.html", port)
-	log.Printf(" Health Check: http://localhost:%s/health", port)
-	log.Printf("==================================================")
-
-	if err := router.Run(":" + port); err != nil {
-		log.Fatalf("Failed to start server: %v", err)
+	// Create standard http.Server instance
+	srv := &http.Server{
+		Addr:    ":" + port,
+		Handler: router,
 	}
+
+	// Start server in background goroutine
+	go func() {
+		log.Printf("==================================================")
+		log.Printf(" Applicant Records API is running on port %s", port)
+		log.Printf(" Swagger UI: http://localhost:%s/swagger/index.html", port)
+		log.Printf(" Health Check: http://localhost:%s/health", port)
+		log.Printf("==================================================")
+
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("Failed to start server: %v", err)
+		}
+	}()
+
+	// Wait for interrupt signal to gracefully shutdown
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	log.Println("[Shutdown] Shutdown signal received, closing connections gracefully...")
+
+	// 5-second timeout context for in-flight requests
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatalf("[Shutdown] Server forced to shutdown: %v", err)
+	}
+
+	// Close database connection pool cleanly
+	if sqlDB, err := db.DB(); err == nil {
+		if err := sqlDB.Close(); err != nil {
+			log.Printf("[Database] Warning: failed to close database cleanly: %v", err)
+		} else {
+			log.Println("[Database] Database connection closed cleanly.")
+		}
+	}
+
+	log.Println("[Shutdown] Server exited gracefully.")
 }
 
