@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 	"os"
@@ -10,6 +11,7 @@ import (
 	_ "github.com/lesmana/sekolah-karir-applicant-api/docs"
 	"github.com/lesmana/sekolah-karir-applicant-api/internal/handler"
 	"github.com/lesmana/sekolah-karir-applicant-api/internal/repository"
+	"github.com/lesmana/sekolah-karir-applicant-api/internal/seeder"
 	"github.com/lesmana/sekolah-karir-applicant-api/internal/service"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -30,10 +32,21 @@ func main() {
 		dbPath = "applicants.db"
 	}
 
+	// CLI Flags
+	seedFlag := flag.Bool("seed", false, "Seed database with mock applicant data")
+	flag.Parse()
+
 	// Initialize Database with GORM and SQLite
 	db, err := config.InitDB(dbPath)
 	if err != nil {
 		log.Fatalf("Failed to initialize database: %v", err)
+	}
+
+	// Auto-seed if flag --seed or env SEED_DATA=true is set
+	if *seedFlag || os.Getenv("SEED_DATA") == "true" {
+		if err := seeder.SeedApplicants(db); err != nil {
+			log.Printf("[Seeder] Warning: failed to seed database: %v\n", err)
+		}
 	}
 
 	// Setup Layered Architecture Dependencies

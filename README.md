@@ -73,6 +73,9 @@ sekolah-karir-mini-assigment/
 │   ├── repository/
 │   │   ├── applicant_repository.go # Data access layer (interface & GORM)
 │   │   └── applicant_repository_test.go # Unit test database repository
+│   ├── seeder/
+│   │   ├── seeder.go               # Mock data seeder untuk reviewer
+│   │   └── seeder_test.go          # Unit test seeder
 │   └── service/
 │       ├── applicant_service.go    # Business logic, validasi aturan bisnis, lifecycle
 │       └── applicant_service_test.go # Unit test layer service
@@ -156,9 +159,14 @@ Daftar Enum Stage:
 Clone atau unduh repository, buka terminal di folder proyek, lalu jalankan:
 
 ```bash
-# Menjalankan aplikasi
+# Opsi A: Menjalankan server (database bersih/kosong)
 go run cmd/api/main.go
+
+# Opsi B (Disarankan untuk Reviewer): Menjalankan server sekaligus auto-seed 10 data pelamar contoh
+go run cmd/api/main.go --seed
 ```
+
+> **Catatan Reviewer Experience**: Menjalankan dengan flag `--seed` (atau environment variable `SEED_DATA=true`) akan otomatis mengisi database dengan 10 data pelamar mock mencakup berbagai posisi dan status stage (`APPLIED` hingga `REJECTED`). Anda dapat langsung mengevaluasi fitur **Pagination**, **Filtering by Stage/Position**, dan **Keyword Search** tanpa harus melakukan input data manual satu per satu. Fitur ini bersifat idempoten (tidak akan menduplikasi data jika dijalankan ulang).
 
 Output log pada terminal:
 ```text
