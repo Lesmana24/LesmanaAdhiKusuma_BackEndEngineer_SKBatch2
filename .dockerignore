@@ -1,0 +1,32 @@
+# Git repository
+.git
+.gitignore
+
+# SQLite databases created locally
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Binaries and build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin/
+dist/
+*.out
+*.test
+coverage.html
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*~
+
+# Operating system files
+.DS_Store
+Thumbs.db
+

@@ -84,7 +84,9 @@ sekolah-karir-mini-assigment/
 │       └── response.go             # Standarisasi JSON response envelope
 ├── postman/
 │   └── Sekolah Karir - Applicant Records API.json # Postman Collection v2.1
+├── .dockerignore
 ├── .gitignore
+├── Dockerfile
 ├── go.mod
 ├── go.sum
 └── README.md
@@ -149,12 +151,10 @@ Daftar Enum Stage:
 ## Panduan Menjalankan Aplikasi
 
 ### Prasyarat:
-- Pastikan telah menginstal [Go](https://go.dev/dl/) versi 1.21 ke atas.
-  ```bash
-  go version
-  ```
+- [Go](https://go.dev/dl/) versi 1.21 ke atas (opsional jika menggunakan Docker).
+- [Docker](https://www.docker.com/) (opsional jika ingin menjalankan via container).
 
-### 1. Menjalankan Server API
+### 1. Menjalankan Server API Secara Lokal (Go CLI)
 
 Clone atau unduh repository, buka terminal di folder proyek, lalu jalankan:
 
@@ -182,7 +182,23 @@ Server aktif di port `8080`. File database `applicants.db` akan dibuat secara ot
 
 ---
 
-### 2. Mengakses Dokumentasi Interaktif (Swagger UI)
+### 2. Menjalankan Server Menggunakan Docker (Portabel & Ringan)
+
+Jika Anda tidak memiliki Go di komputer atau ingin menjalankan aplikasi dalam lingkungan yang terisolasi:
+
+```bash
+# 1. Build Docker image (multi-stage, ukuran ~15MB)
+docker build -t sekolah-karir-applicant-api .
+
+# 2. Jalankan container (otomatis aktif dengan auto-seed data mock)
+docker run -p 8080:8080 sekolah-karir-applicant-api
+```
+
+Aplikasi dan Swagger UI akan langsung aktif di port `8080` dan siap digunakan.
+
+---
+
+### 3. Mengakses Dokumentasi Interaktif (Swagger UI)
 
 Buka peramban (browser) dan akses:
 **[http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)**
@@ -191,7 +207,7 @@ Dari halaman ini Anda dapat mengecek spesifikasi skema data serta menguji seluru
 
 ---
 
-### 3. Mengimpor Postman Collection
+### 4. Mengimpor Postman Collection
 
 1. Buka aplikasi **Postman**.
 2. Klik tombol **Import**.
@@ -200,7 +216,7 @@ Dari halaman ini Anda dapat mengecek spesifikasi skema data serta menguji seluru
 
 ---
 
-### 4. Menjalankan Automated Tests (Unit & Integration)
+### 5. Menjalankan Automated Tests (Unit & Integration)
 
 Pengujian mencakup unit test business logic pada service, operasi database repository, dan integrasi HTTP endpoint:
 
