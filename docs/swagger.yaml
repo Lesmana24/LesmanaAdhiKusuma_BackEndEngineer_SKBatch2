@@ -1,0 +1,298 @@
+basePath: /
+definitions:
+  model.Applicant:
+    properties:
+      applied_position:
+        example: Back-End Engineer
+        type: string
+      created_at:
+        example: "2026-11-12T19:30:00Z"
+        type: string
+      email:
+        example: budi.santoso@example.com
+        type: string
+      id:
+        example: 8f123456-789a-bcde-f012-3456789abcde
+        type: string
+      name:
+        example: Budi Santoso
+        type: string
+      notes:
+        example: Kandidat berpengalaman Go & PostgreSQL
+        type: string
+      phone:
+        example: "081234567890"
+        type: string
+      stage:
+        example: APPLIED
+        type: string
+      updated_at:
+        example: "2026-11-12T19:30:00Z"
+        type: string
+    type: object
+  model.CreateApplicantRequest:
+    properties:
+      applied_position:
+        example: Back-End Engineer
+        maxLength: 100
+        minLength: 2
+        type: string
+      email:
+        example: budi.santoso@example.com
+        maxLength: 100
+        type: string
+      name:
+        example: Budi Santoso
+        maxLength: 100
+        minLength: 2
+        type: string
+      notes:
+        example: Kandidat direferensikan oleh tim engineer
+        maxLength: 500
+        type: string
+      phone:
+        example: "081234567890"
+        maxLength: 20
+        minLength: 8
+        type: string
+    required:
+    - applied_position
+    - email
+    - name
+    - phone
+    type: object
+  model.UpdateStageRequest:
+    properties:
+      notes:
+        example: Lolos screening CV, lanjut interview teknis
+        maxLength: 500
+        type: string
+      stage:
+        example: INTERVIEW
+        type: string
+    required:
+    - stage
+    type: object
+  response.PaginationMeta:
+    properties:
+      limit:
+        example: 10
+        type: integer
+      page:
+        example: 1
+        type: integer
+      total_pages:
+        example: 5
+        type: integer
+      total_records:
+        example: 50
+        type: integer
+    type: object
+  response.Response:
+    properties:
+      data: {}
+      errors:
+        items:
+          type: string
+        type: array
+      message:
+        example: Operation successful
+        type: string
+      meta:
+        $ref: '#/definitions/response.PaginationMeta'
+      success:
+        example: true
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: kandidat@sekolahkarir.com
+    name: Lesmana Adh Kusuma (SKR26-0005)
+  description: RESTful API for applicant records management (create, list, stage-update,
+    detail, health check).
+  license:
+    name: MIT
+  title: Applicant Records API - Sekolah Karir
+  version: "1.0"
+paths:
+  /api/v1/applicants:
+    get:
+      description: Get a paginated list of applicants with optional filtering and
+        keyword search
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Records per page (default: 10, max: 100)'
+        in: query
+        name: limit
+        type: integer
+      - description: Filter by stage (e.g. APPLIED, SCREENING, INTERVIEW, etc.)
+        in: query
+        name: stage
+        type: string
+      - description: Filter by position name (case-insensitive substring)
+        in: query
+        name: position
+        type: string
+      - description: Search keyword in name or email
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Applicant'
+                  type: array
+                meta:
+                  $ref: '#/definitions/response.PaginationMeta'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: List Applicants
+      tags:
+      - Applicants
+    post:
+      consumes:
+      - application/json
+      description: Register a new job applicant record with initial stage APPLIED
+      parameters:
+      - description: Applicant payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateApplicantRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Applicant'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create Applicant
+      tags:
+      - Applicants
+  /api/v1/applicants/{id}:
+    get:
+      description: Retrieve an applicant record by its UUID
+      parameters:
+      - description: Applicant UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Applicant'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get Applicant Detail
+      tags:
+      - Applicants
+  /api/v1/applicants/{id}/stage:
+    patch:
+      consumes:
+      - application/json
+      description: Update the recruitment stage and notes of an applicant
+      parameters:
+      - description: Applicant UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update stage payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateStageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Applicant'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update Applicant Stage
+      tags:
+      - Applicants
+  /health:
+    get:
+      description: Check service availability and health status
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Health Check
+      tags:
+      - System
+swagger: "2.0"

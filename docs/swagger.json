@@ -1,0 +1,450 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "RESTful API for applicant records management (create, list, stage-update, detail, health check).",
+        "title": "Applicant Records API - Sekolah Karir",
+        "contact": {
+            "name": "Lesmana Adh Kusuma (SKR26-0005)",
+            "email": "kandidat@sekolahkarir.com"
+        },
+        "license": {
+            "name": "MIT"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/api/v1/applicants": {
+            "get": {
+                "description": "Get a paginated list of applicants with optional filtering and keyword search",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Applicants"
+                ],
+                "summary": "List Applicants",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Records per page (default: 10, max: 100)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by stage (e.g. APPLIED, SCREENING, INTERVIEW, etc.)",
+                        "name": "stage",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by position name (case-insensitive substring)",
+                        "name": "position",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search keyword in name or email",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Applicant"
+                                            }
+                                        },
+                                        "meta": {
+                                            "$ref": "#/definitions/response.PaginationMeta"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Register a new job applicant record with initial stage APPLIED",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Applicants"
+                ],
+                "summary": "Create Applicant",
+                "parameters": [
+                    {
+                        "description": "Applicant payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateApplicantRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Applicant"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/applicants/{id}": {
+            "get": {
+                "description": "Retrieve an applicant record by its UUID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Applicants"
+                ],
+                "summary": "Get Applicant Detail",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Applicant UUID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Applicant"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/applicants/{id}/stage": {
+            "patch": {
+                "description": "Update the recruitment stage and notes of an applicant",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Applicants"
+                ],
+                "summary": "Update Applicant Stage",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Applicant UUID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update stage payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateStageRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Applicant"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "description": "Check service availability and health status",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "System"
+                ],
+                "summary": "Health Check",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.Applicant": {
+            "type": "object",
+            "properties": {
+                "applied_position": {
+                    "type": "string",
+                    "example": "Back-End Engineer"
+                },
+                "created_at": {
+                    "type": "string",
+                    "example": "2026-11-12T19:30:00Z"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "budi.santoso@example.com"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "8f123456-789a-bcde-f012-3456789abcde"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Budi Santoso"
+                },
+                "notes": {
+                    "type": "string",
+                    "example": "Kandidat berpengalaman Go \u0026 PostgreSQL"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "081234567890"
+                },
+                "stage": {
+                    "type": "string",
+                    "example": "APPLIED"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2026-11-12T19:30:00Z"
+                }
+            }
+        },
+        "model.CreateApplicantRequest": {
+            "type": "object",
+            "required": [
+                "applied_position",
+                "email",
+                "name",
+                "phone"
+            ],
+            "properties": {
+                "applied_position": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 2,
+                    "example": "Back-End Engineer"
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "budi.santoso@example.com"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 2,
+                    "example": "Budi Santoso"
+                },
+                "notes": {
+                    "type": "string",
+                    "maxLength": 500,
+                    "example": "Kandidat direferensikan oleh tim engineer"
+                },
+                "phone": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 8,
+                    "example": "081234567890"
+                }
+            }
+        },
+        "model.UpdateStageRequest": {
+            "type": "object",
+            "required": [
+                "stage"
+            ],
+            "properties": {
+                "notes": {
+                    "type": "string",
+                    "maxLength": 500,
+                    "example": "Lolos screening CV, lanjut interview teknis"
+                },
+                "stage": {
+                    "type": "string",
+                    "example": "INTERVIEW"
+                }
+            }
+        },
+        "response.PaginationMeta": {
+            "type": "object",
+            "properties": {
+                "limit": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "page": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "total_pages": {
+                    "type": "integer",
+                    "example": 5
+                },
+                "total_records": {
+                    "type": "integer",
+                    "example": 50
+                }
+            }
+        },
+        "response.Response": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Operation successful"
+                },
+                "meta": {
+                    "$ref": "#/definitions/response.PaginationMeta"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        }
+    }
+}
