@@ -80,7 +80,7 @@ sekolah-karir-mini-assigment/
 │   └── response/
 │       └── response.go             # Standarisasi JSON response envelope
 ├── postman/
-│   └── SekolahKarir_Applicant_API.postman_collection.json # Postman Collection v2.1
+│   └── Sekolah Karir - Applicant Records API.json # Postman Collection v2.1
 ├── .gitignore
 ├── go.mod
 ├── go.sum
@@ -91,10 +91,10 @@ sekolah-karir-mini-assigment/
 
 ```mermaid
 flowchart LR
-    Client([Client / Web / Mobile]) -->|HTTP Request| Handler[Handler Layer\n(Gin Controller)]
-    Handler -->|Validate & DTO| Service[Service Layer\n(Business Logic)]
-    Service -->|Domain Entity| Repository[Repository Layer\n(GORM SQLite)]
-    Repository -->|SQL Queries| DB[(SQLite Database)]
+    Client(["Client / Web / Mobile"]) -->|HTTP Request| Handler["Handler Layer (Gin Controller)"]
+    Handler -->|Validate & DTO| Service["Service Layer (Business Logic)"]
+    Service -->|Domain Entity| Repository["Repository Layer (GORM SQLite)"]
+    Repository -->|SQL Queries| DB[("SQLite Database")]
 ```
 
 ### Recruitment Stage Lifecycle
@@ -185,7 +185,7 @@ Dari halaman ini Anda dapat mengecek spesifikasi skema data serta menguji seluru
 
 1. Buka aplikasi **Postman**.
 2. Klik tombol **Import**.
-3. Pilih file: `postman/SSekolah Karir - Applicant Records API.json`.
+3. Pilih file: `postman/Sekolah Karir - Applicant Records API.json`.
 4. Koleksi sudah dilengkapi dengan *pre-configured test script* yang secara otomatis menyimpan `applicant_id` baru ke dalam variable koleksi untuk mempermudah eksekusi request selanjutnya.
 
 ---
