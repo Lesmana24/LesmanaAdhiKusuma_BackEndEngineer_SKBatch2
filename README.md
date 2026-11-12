@@ -7,7 +7,7 @@
 [![Swagger](https://img.shields.io/badge/Swagger-OpenAPI_3.0-85EA2D?style=flat&logo=swagger)](http://localhost:8080/swagger/index.html)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Backend RESTful API untuk pengelolaan data dan proses rekrutmen pelamar kerja (*Applicant Records*), dirancang dan dibangun untuk **Mini Assignment Back-End Engineer Sekolah Karir Batch 2**.
+Backend RESTful API untuk pengelolaan data dan proses seleksi pelamar (*Applicant Records*), dirancang dan dibangun untuk **Mini Assignment Back-End Engineer Internship - Sekolah Karir Batch 2**.
 
 ---
 
@@ -15,7 +15,7 @@ Backend RESTful API untuk pengelolaan data dan proses rekrutmen pelamar kerja (*
 
 - **Nama Kandidat**: Lesmana Adhi Kusuma
 - **Applicant ID**: SKR26-0005
-- **Posisi**: Back-End Engineer
+- **Posisi**: Back-End Engineer Intern
 
 ---
 
@@ -460,4 +460,4 @@ Pengerjaan proyek ini memanfaatkan alat bantu AI sebagai asisten teknis dengan t
 
 ## Lisensi
 
-Proyek ini dibuat untuk keperluan seleksi kerja Sekolah Karir dan dilisensikan di bawah lisensi [MIT](LICENSE).
+Proyek ini dibuat untuk keperluan seleksi magang (internship) Sekolah Karir dan dilisensikan di bawah lisensi [MIT](LICENSE).
