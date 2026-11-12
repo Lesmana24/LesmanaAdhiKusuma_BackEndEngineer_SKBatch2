@@ -40,6 +40,12 @@ func IsValidStage(stage string) bool {
 	return false
 }
 
+// IsTerminalStage checks whether a stage represents an immutable final state
+func IsTerminalStage(stage string) bool {
+	upper := strings.ToUpper(strings.TrimSpace(stage))
+	return upper == StageAccepted || upper == StageRejected
+}
+
 // Applicant represents the domain model for an applicant record
 type Applicant struct {
 	ID              string    `gorm:"primaryKey;type:varchar(36)" json:"id" example:"8f123456-789a-bcde-f012-3456789abcde"`

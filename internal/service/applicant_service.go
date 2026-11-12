@@ -14,9 +14,10 @@ import (
 )
 
 var (
-	ErrApplicantNotFound  = errors.New("applicant not found")
-	ErrEmailAlreadyExists = errors.New("applicant with this email already exists")
-	ErrInvalidStage       = errors.New("invalid recruitment stage")
+	ErrApplicantNotFound   = errors.New("applicant not found")
+	ErrEmailAlreadyExists  = errors.New("applicant with this email already exists")
+	ErrInvalidStage        = errors.New("invalid recruitment stage")
+	ErrTerminalStageLocked = errors.New("cannot update stage: applicant is already in a terminal state (ACCEPTED or REJECTED)")
 )
 
 // ApplicantService defines business logic methods for applicants
@@ -118,12 +119,17 @@ func (s *applicantService) UpdateApplicantStage(ctx context.Context, id string, 
 	}
 
 	// Check if applicant exists
-	_, err := s.repo.FindByID(ctx, id)
+	applicant, err := s.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrApplicantNotFound
 		}
 		return nil, err
+	}
+
+	// Guard: Terminal state protection (ACCEPTED or REJECTED cannot be modified)
+	if model.IsTerminalStage(applicant.Stage) {
+		return nil, ErrTerminalStageLocked
 	}
 
 	updated, err := s.repo.UpdateStage(ctx, id, req.Stage, strings.TrimSpace(req.Notes))

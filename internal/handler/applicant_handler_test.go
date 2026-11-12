@@ -304,5 +304,36 @@ func TestHandler_UpdateApplicantStage(t *testing.T) {
 
 		assert.Equal(t, http.StatusNotFound, w.Code)
 	})
+
+	t.Run("terminal state protection: cannot update applicant in terminal stage returns 400", func(t *testing.T) {
+		// First, update to ACCEPTED
+		acceptPayload := map[string]interface{}{
+			"stage": "ACCEPTED",
+		}
+		acceptBody, _ := json.Marshal(acceptPayload)
+		acceptReq, _ := http.NewRequest(http.MethodPatch, "/api/v1/applicants/"+createdID+"/stage", bytes.NewBuffer(acceptBody))
+		acceptReq.Header.Set("Content-Type", "application/json")
+		acceptW := httptest.NewRecorder()
+		r.ServeHTTP(acceptW, acceptReq)
+		require.Equal(t, http.StatusOK, acceptW.Code)
+
+		// Next, attempt to change stage from ACCEPTED to SCREENING
+		reopenPayload := map[string]interface{}{
+			"stage": "SCREENING",
+		}
+		reopenBody, _ := json.Marshal(reopenPayload)
+		reopenReq, _ := http.NewRequest(http.MethodPatch, "/api/v1/applicants/"+createdID+"/stage", bytes.NewBuffer(reopenBody))
+		reopenReq.Header.Set("Content-Type", "application/json")
+		reopenW := httptest.NewRecorder()
+		r.ServeHTTP(reopenW, reopenReq)
+
+		assert.Equal(t, http.StatusBadRequest, reopenW.Code)
+
+		var res response.Response
+		err := json.Unmarshal(reopenW.Body.Bytes(), &res)
+		require.NoError(t, err)
+		assert.False(t, res.Success)
+		assert.Contains(t, res.Message, "terminal state")
+	})
 }
 

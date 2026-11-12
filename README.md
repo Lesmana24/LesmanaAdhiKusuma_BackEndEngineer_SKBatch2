@@ -123,8 +123,10 @@ Daftar Enum Stage:
 - `INTERVIEW`
 - `TECHNICAL_TEST`
 - `OFFERED`
-- `ACCEPTED`
-- `REJECTED`
+- `ACCEPTED` *(Terminal state)*
+- `REJECTED` *(Terminal state)*
+
+> **Catatan Validasi Domain (Terminal State Protection)**: Status `ACCEPTED` dan `REJECTED` adalah *terminal states* (tahap akhir). Sekali seorang kandidat berstatus diterima atau ditolak, API secara otomatis mengunci dan menolak setiap upaya perubahan status selanjutnya guna mencegah anomali data pada sistem ATS.
 
 ---
 
@@ -440,6 +442,14 @@ curl -X PATCH http://localhost:8080/api/v1/applicants/e81d89b1-0428-4e1b-8535-97
 {
   "success": false,
   "message": "Invalid recruitment stage. Allowed stages: [APPLIED SCREENING INTERVIEW TECHNICAL_TEST OFFERED ACCEPTED REJECTED]"
+}
+```
+
+**Respon Gagal - Pelamar Berada di Terminal State (400 Bad Request)**:
+```json
+{
+  "success": false,
+  "message": "cannot update stage: applicant is already in a terminal state (ACCEPTED or REJECTED)"
 }
 ```
 

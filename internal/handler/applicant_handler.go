@@ -168,6 +168,10 @@ func (h *ApplicantHandler) UpdateApplicantStage(c *gin.Context) {
 			response.BadRequest(c, "Invalid recruitment stage. Allowed stages: "+fmt.Sprint(model.AllowedStages()))
 			return
 		}
+		if errors.Is(err, service.ErrTerminalStageLocked) {
+			response.BadRequest(c, err.Error())
+			return
+		}
 		response.InternalServerError(c, "Failed to update stage: "+err.Error())
 		return
 	}

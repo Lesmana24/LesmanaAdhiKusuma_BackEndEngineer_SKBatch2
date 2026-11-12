@@ -224,5 +224,47 @@ func TestApplicantService_UpdateApplicantStage(t *testing.T) {
 		assert.ErrorIs(t, err, service.ErrApplicantNotFound)
 		assert.Nil(t, updated)
 	})
+
+	t.Run("terminal state protection: cannot update stage if already ACCEPTED", func(t *testing.T) {
+		// Move candidate to ACCEPTED
+		acceptedApp, err := svc.UpdateApplicantStage(ctx, created.ID, model.UpdateStageRequest{
+			Stage: model.StageAccepted,
+			Notes: "Offer accepted by candidate",
+		})
+		require.NoError(t, err)
+		assert.Equal(t, model.StageAccepted, acceptedApp.Stage)
+
+		// Attempt to move back to SCREENING or any other stage
+		attemptUpdate, err := svc.UpdateApplicantStage(ctx, created.ID, model.UpdateStageRequest{
+			Stage: model.StageScreening,
+		})
+		assert.ErrorIs(t, err, service.ErrTerminalStageLocked)
+		assert.Nil(t, attemptUpdate)
+	})
+
+	t.Run("terminal state protection: cannot update stage if already REJECTED", func(t *testing.T) {
+		// Create a separate applicant
+		rejectedCand, err := svc.CreateApplicant(ctx, model.CreateApplicantRequest{
+			Name:            "Rejected Candidate",
+			Email:           "rejected@example.com",
+			Phone:           "089988776655",
+			AppliedPosition: "QA Engineer",
+		})
+		require.NoError(t, err)
+
+		// Reject candidate
+		_, err = svc.UpdateApplicantStage(ctx, rejectedCand.ID, model.UpdateStageRequest{
+			Stage: model.StageRejected,
+			Notes: "Did not meet requirements",
+		})
+		require.NoError(t, err)
+
+		// Attempt to update stage after rejection
+		attemptUpdate, err := svc.UpdateApplicantStage(ctx, rejectedCand.ID, model.UpdateStageRequest{
+			Stage: model.StageInterview,
+		})
+		assert.ErrorIs(t, err, service.ErrTerminalStageLocked)
+		assert.Nil(t, attemptUpdate)
+	})
 }
 
