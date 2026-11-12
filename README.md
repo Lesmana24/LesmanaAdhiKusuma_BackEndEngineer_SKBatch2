@@ -13,11 +13,9 @@ Backend RESTful API untuk pengelolaan data dan proses rekrutmen pelamar kerja (*
 
 ## Informasi Kandidat
 
-- **Nama Kandidat**: Lesmana Adh Kusuma
+- **Nama Kandidat**: Lesmana Adhi Kusuma
 - **Applicant ID**: SKR26-0005
 - **Posisi**: Back-End Engineer
-- **Format Penamaan Submission**: `LesmanaAdhKusuma_BackEndEngineer_SKBatch2`
-- **Form Pengumpulan**: [Google Form Submission](https://docs.google.com/forms/d/e/1FAIpQLSfkHJ4xtKuGU0tepeBsNO7ssOhxa7AFRTAh8Nph2QeHKt5H6g/viewform)
 
 ---
 
@@ -449,16 +447,14 @@ curl -X PATCH http://localhost:8080/api/v1/applicants/e81d89b1-0428-4e1b-8535-97
 
 ## Catatan Penggunaan AI (AI & Tools Disclosure)
 
-Sesuai ketentuan brief submission **Sekolah Karir**:
-> "Kamu boleh menggunakan AI tools, internet references, coding/design assistants, atau tools lain yang relevan. Jika menggunakan AI, tambahkan catatan singkat berisi tool yang digunakan dan bagaimana tool tersebut membantu."
+Pengerjaan proyek ini memanfaatkan alat bantu AI sebagai asisten teknis dengan transparansi sebagai berikut:
 
-Berikut catatan transparansi penggunaan alat bantu selama pengerjaan assignment ini:
+1. **Alat Bantu yang Digunakan**:
+   - **Google Antigravity AI Assistant**: Digunakan sebagai *pair-programming & thinking partner* untuk brainstorming trade-off arsitektur (*Clean Architecture*), memvalidasi skema data dan tahapan rekrutmen, membantu perancangan skenario pengujian (*unit & integration tests*), serta verifikasi tag Swagger OpenAPI.
 
-1. **Google Antigravity AI Assistant**:
-   - Digunakan sebagai *collaborative thinking partner* melalui mekanisme interview terstruktur (`/grill-me` dan `/plan`) untuk membedah persyaratan teknis, mengeksplorasi trade-off arsitektur (misal: pemilihan driver SQLite CGO-free vs database/sql), dan merumuskan skema pengujian yang menyeluruh.
-   - Membantu scaffolding boilerplate *Clean Architecture* di Go serta memastikan kepatuhan tag Swagger OpenAPI 3.0.
-2. **Keterlibatan & Pemahaman Kandidat**:
-   - Seluruh arsitektur, pemilihan model data, aturan tahapan rekrutmen, penanganan validasi, dan skenario pengujian dipahami secara mendalam oleh kandidat dan dapat dipresentasikan atau didiskusikan secara komprehensif pada tahap wawancara teknis.
+2. **Keterlibatan dan Pemahaman Kandidat**:
+   - Seluruh keputusan arsitektur, pemilihan dependensi, aturan validasi, dan alur logika bisnis dipahami secara mendalam oleh kandidat.
+   - Kandidat bertanggung jawab penuh atas seluruh kode yang dihasilkan dan siap mendiskusikan serta mempertanggungjawabkan implementasi ini pada sesi wawancara teknis.
 
 ---
 
