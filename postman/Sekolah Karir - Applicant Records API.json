@@ -1,0 +1,1207 @@
+{
+  "info": {
+    "name": "Sekolah Karir - Applicant Records API",
+    "description": "Postman Collection untuk Mini Assignment Back-End Engineer Sekolah Karir Batch 2.\nKandidat: Lesmana Adh Kusuma (SKR26-0005)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Liveness check endpoint untuk memverifikasi kesiapan server API.",
+            "url": {
+              "raw": "{{base_url}}/health",
+              "protocol": "",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ],
+              "query": [],
+              "variable": []
+            }
+          },
+          "response": [
+            {
+              "name": "example",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/health",
+                  "protocol": "",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "health"
+                  ],
+                  "query": [],
+                  "variable": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "access-control-allow-credentials",
+                  "value": "true",
+                  "name": "access-control-allow-credentials",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-headers",
+                  "value": "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With",
+                  "name": "access-control-allow-headers",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-methods",
+                  "value": "POST, OPTIONS, GET, PUT, PATCH, DELETE",
+                  "name": "access-control-allow-methods",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*",
+                  "name": "access-control-allow-origin",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8",
+                  "name": "content-type",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 12 Nov 2026 13:23:42 GMT",
+                  "name": "date",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-length",
+                  "value": "98",
+                  "name": "content-length",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Service is healthy and ready to serve requests\",\n  \"data\": {\n    \"status\": \"UP\"\n  }\n}",
+              "_postman_previewlanguage": "json"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Applicants",
+      "item": [
+        {
+          "name": "Create Applicant (Success)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "description": "Mendaftarkan pelamar baru. Stage otomatis diatur ke 'APPLIED' dan ID di-generate UUID v4.",
+            "url": {
+              "raw": "{{base_url}}/api/v1/applicants",
+              "protocol": "",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "applicants"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lesmana Adh Kusuma\",\n  \"email\": \"lesmana.adh@example.com\",\n  \"phone\": \"081234567890\",\n  \"applied_position\": \"Back-End Engineer\",\n  \"notes\": \"Kandidat memiliki keahlian Go, Gin, GORM, dan Microservices.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.data && jsonData.data.id) {",
+                  "    pm.collectionVariables.set(\"applicant_id\", jsonData.data.id);",
+                  "    console.log(\"Saved applicant_id: \" + jsonData.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "example",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "",
+                    "disabled": false,
+                    "type": "default"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/applicants",
+                  "protocol": "",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "applicants"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Lesmana Adh Kusuma\",\n  \"email\": \"lesmana.adh@example.com\",\n  \"phone\": \"081234567890\",\n  \"applied_position\": \"Back-End Engineer\",\n  \"notes\": \"Kandidat memiliki keahlian Go, Gin, GORM, dan Microservices.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "access-control-allow-credentials",
+                  "value": "true",
+                  "name": "access-control-allow-credentials",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-headers",
+                  "value": "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With",
+                  "name": "access-control-allow-headers",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-methods",
+                  "value": "POST, OPTIONS, GET, PUT, PATCH, DELETE",
+                  "name": "access-control-allow-methods",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*",
+                  "name": "access-control-allow-origin",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8",
+                  "name": "content-type",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 12 Nov 2026 13:23:51 GMT",
+                  "name": "date",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-length",
+                  "value": "423",
+                  "name": "content-length",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Applicant created successfully\",\n  \"data\": {\n    \"id\": \"1eb1f256-52c5-4a5b-ba25-30af4e808326\",\n    \"name\": \"Lesmana Adh Kusuma\",\n    \"email\": \"lesmana.adh@example.com\",\n    \"phone\": \"081234567890\",\n    \"applied_position\": \"Back-End Engineer\",\n    \"stage\": \"APPLIED\",\n    \"notes\": \"Kandidat memiliki keahlian Go, Gin, GORM, dan Microservices.\",\n    \"created_at\": \"2026-11-12T20:23:51.5096088+07:00\",\n    \"updated_at\": \"2026-11-12T20:23:51.5096088+07:00\"\n  }\n}",
+              "_postman_previewlanguage": "json"
+            }
+          ]
+        },
+        {
+          "name": "Create Applicant (Validation Error - 400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "description": "Menguji respon error validasi (400 Bad Request) jika data tidak memenuhi syarat schema.",
+            "url": {
+              "raw": "{{base_url}}/api/v1/applicants",
+              "protocol": "",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "applicants"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"email\": \"invalid-email-format\",\n  \"phone\": \"123\",\n  \"applied_position\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "example",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "",
+                    "disabled": false,
+                    "type": "default"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/applicants",
+                  "protocol": "",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "applicants"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"\",\n  \"email\": \"invalid-email-format\",\n  \"phone\": \"123\",\n  \"applied_position\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "access-control-allow-credentials",
+                  "value": "true",
+                  "name": "access-control-allow-credentials",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-headers",
+                  "value": "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With",
+                  "name": "access-control-allow-headers",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-methods",
+                  "value": "POST, OPTIONS, GET, PUT, PATCH, DELETE",
+                  "name": "access-control-allow-methods",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*",
+                  "name": "access-control-allow-origin",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8",
+                  "name": "content-type",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 12 Nov 2026 13:24:02 GMT",
+                  "name": "date",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-length",
+                  "value": "217",
+                  "name": "content-length",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": [\n    \"field 'Name' is required\",\n    \"field 'Email' must be a valid email address\",\n    \"field 'Phone' must have at least 8 characters\",\n    \"field 'AppliedPosition' is required\"\n  ]\n}",
+              "_postman_previewlanguage": "json"
+            }
+          ]
+        },
+        {
+          "name": "Create Applicant (Duplicate Email - 409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "description": "Menguji respon penolakan (409 Conflict) ketika email sudah terdaftar.",
+            "url": {
+              "raw": "{{base_url}}/api/v1/applicants",
+              "protocol": "",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "applicants"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lesmana Duplikat\",\n  \"email\": \"lesmana.adh@example.com\",\n  \"phone\": \"089999999999\",\n  \"applied_position\": \"Back-End Engineer\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "example",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "",
+                    "disabled": false,
+                    "type": "default"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/applicants",
+                  "protocol": "",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "applicants"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Lesmana Duplikat\",\n  \"email\": \"lesmana.adh@example.com\",\n  \"phone\": \"089999999999\",\n  \"applied_position\": \"Back-End Engineer\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "access-control-allow-credentials",
+                  "value": "true",
+                  "name": "access-control-allow-credentials",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-headers",
+                  "value": "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With",
+                  "name": "access-control-allow-headers",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-methods",
+                  "value": "POST, OPTIONS, GET, PUT, PATCH, DELETE",
+                  "name": "access-control-allow-methods",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*",
+                  "name": "access-control-allow-origin",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8",
+                  "name": "content-type",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 12 Nov 2026 13:24:09 GMT",
+                  "name": "date",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-length",
+                  "value": "70",
+                  "name": "content-length",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"applicant with this email already exists\"\n}",
+              "_postman_previewlanguage": "json"
+            }
+          ]
+        },
+        {
+          "name": "List Applicants (Default Pagination)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Mengambil daftar seluruh pelamar kerja dengan paginasi standar.",
+            "url": {
+              "raw": "{{base_url}}/api/v1/applicants?page=1&limit=10",
+              "protocol": "",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "applicants?page=1&limit=10"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ],
+              "variable": []
+            }
+          },
+          "response": [
+            {
+              "name": "example",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/applicants?page=1&limit=10",
+                  "protocol": "",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "applicants?page=1&limit=10"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "access-control-allow-credentials",
+                  "value": "true",
+                  "name": "access-control-allow-credentials",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-headers",
+                  "value": "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With",
+                  "name": "access-control-allow-headers",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-methods",
+                  "value": "POST, OPTIONS, GET, PUT, PATCH, DELETE",
+                  "name": "access-control-allow-methods",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*",
+                  "name": "access-control-allow-origin",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8",
+                  "name": "content-type",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 12 Nov 2026 13:24:18 GMT",
+                  "name": "date",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-length",
+                  "value": "491",
+                  "name": "content-length",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Applicants retrieved successfully\",\n  \"data\": [\n    {\n      \"id\": \"1eb1f256-52c5-4a5b-ba25-30af4e808326\",\n      \"name\": \"Lesmana Adh Kusuma\",\n      \"email\": \"lesmana.adh@example.com\",\n      \"phone\": \"081234567890\",\n      \"applied_position\": \"Back-End Engineer\",\n      \"stage\": \"APPLIED\",\n      \"notes\": \"Kandidat memiliki keahlian Go, Gin, GORM, dan Microservices.\",\n      \"created_at\": \"2026-11-12T20:23:51.5096088+07:00\",\n      \"updated_at\": \"2026-11-12T20:23:51.5096088+07:00\"\n    }\n  ],\n  \"meta\": {\n    \"page\": 1,\n    \"limit\": 10,\n    \"total_records\": 1,\n    \"total_pages\": 1\n  }\n}",
+              "_postman_previewlanguage": "json"
+            }
+          ]
+        },
+        {
+          "name": "List Applicants (Filter by Stage & Search)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Mengambil daftar pelamar dengan filter stage dan pencarian kata kunci pada nama/email.",
+            "url": {
+              "raw": "{{base_url}}/api/v1/applicants?search=Lesmana",
+              "protocol": "",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "applicants?search=Lesmana"
+              ],
+              "query": [
+                {
+                  "key": "stage",
+                  "value": "APPLIED"
+                },
+                {
+                  "key": "search",
+                  "value": "Lesmana"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ],
+              "variable": []
+            }
+          },
+          "response": [
+            {
+              "name": "example",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/applicants?search=Lesmana",
+                  "protocol": "",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "applicants?search=Lesmana"
+                  ],
+                  "query": [
+                    {
+                      "key": "stage",
+                      "value": "APPLIED"
+                    },
+                    {
+                      "key": "search",
+                      "value": "Lesmana"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "5"
+                    }
+                  ],
+                  "variable": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "access-control-allow-credentials",
+                  "value": "true",
+                  "name": "access-control-allow-credentials",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-headers",
+                  "value": "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With",
+                  "name": "access-control-allow-headers",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-methods",
+                  "value": "POST, OPTIONS, GET, PUT, PATCH, DELETE",
+                  "name": "access-control-allow-methods",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*",
+                  "name": "access-control-allow-origin",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8",
+                  "name": "content-type",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 12 Nov 2026 13:24:37 GMT",
+                  "name": "date",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-length",
+                  "value": "491",
+                  "name": "content-length",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Applicants retrieved successfully\",\n  \"data\": [\n    {\n      \"id\": \"1eb1f256-52c5-4a5b-ba25-30af4e808326\",\n      \"name\": \"Lesmana Adh Kusuma\",\n      \"email\": \"lesmana.adh@example.com\",\n      \"phone\": \"081234567890\",\n      \"applied_position\": \"Back-End Engineer\",\n      \"stage\": \"APPLIED\",\n      \"notes\": \"Kandidat memiliki keahlian Go, Gin, GORM, dan Microservices.\",\n      \"created_at\": \"2026-11-12T20:23:51.5096088+07:00\",\n      \"updated_at\": \"2026-11-12T20:23:51.5096088+07:00\"\n    }\n  ],\n  \"meta\": {\n    \"page\": 1,\n    \"limit\": 10,\n    \"total_records\": 1,\n    \"total_pages\": 1\n  }\n}",
+              "_postman_previewlanguage": "json"
+            }
+          ]
+        },
+        {
+          "name": "Get Applicant by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Mengambil detail record satu pelamar berdasarkan UUID.",
+            "url": {
+              "raw": "{{base_url}}/api/v1/applicants/:id",
+              "protocol": "",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "applicants",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1eb1f256-52c5-4a5b-ba25-30af4e808326"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "example",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/applicants/:id",
+                  "protocol": "",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "applicants",
+                    ":id"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1eb1f256-52c5-4a5b-ba25-30af4e808326"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "access-control-allow-credentials",
+                  "value": "true",
+                  "name": "access-control-allow-credentials",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-headers",
+                  "value": "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With",
+                  "name": "access-control-allow-headers",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-methods",
+                  "value": "POST, OPTIONS, GET, PUT, PATCH, DELETE",
+                  "name": "access-control-allow-methods",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*",
+                  "name": "access-control-allow-origin",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8",
+                  "name": "content-type",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 12 Nov 2026 13:25:18 GMT",
+                  "name": "date",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-length",
+                  "value": "425",
+                  "name": "content-length",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Applicant retrieved successfully\",\n  \"data\": {\n    \"id\": \"1eb1f256-52c5-4a5b-ba25-30af4e808326\",\n    \"name\": \"Lesmana Adh Kusuma\",\n    \"email\": \"lesmana.adh@example.com\",\n    \"phone\": \"081234567890\",\n    \"applied_position\": \"Back-End Engineer\",\n    \"stage\": \"APPLIED\",\n    \"notes\": \"Kandidat memiliki keahlian Go, Gin, GORM, dan Microservices.\",\n    \"created_at\": \"2026-11-12T20:23:51.5096088+07:00\",\n    \"updated_at\": \"2026-11-12T20:23:51.5096088+07:00\"\n  }\n}",
+              "_postman_previewlanguage": "json"
+            }
+          ]
+        },
+        {
+          "name": "Update Applicant Stage (Success)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "description": "Memperbarui stage pelamar kerja dan menambahkan catatan progres.",
+            "url": {
+              "raw": "{{base_url}}/api/v1/applicants/:id/stage",
+              "protocol": "",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "applicants",
+                ":id",
+                "stage"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1eb1f256-52c5-4a5b-ba25-30af4e808326"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stage\": \"INTERVIEW\",\n  \"notes\": \"Lolos seleksi berkas, diundang untuk wawancara teknis.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "example",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "",
+                    "disabled": false,
+                    "type": "default"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/applicants/:id/stage",
+                  "protocol": "",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "applicants",
+                    ":id",
+                    "stage"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1eb1f256-52c5-4a5b-ba25-30af4e808326"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"stage\": \"INTERVIEW\",\n  \"notes\": \"Lolos seleksi berkas, diundang untuk wawancara teknis.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "access-control-allow-credentials",
+                  "value": "true",
+                  "name": "access-control-allow-credentials",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-headers",
+                  "value": "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With",
+                  "name": "access-control-allow-headers",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-methods",
+                  "value": "POST, OPTIONS, GET, PUT, PATCH, DELETE",
+                  "name": "access-control-allow-methods",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*",
+                  "name": "access-control-allow-origin",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8",
+                  "name": "content-type",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 12 Nov 2026 13:25:49 GMT",
+                  "name": "date",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-length",
+                  "value": "425",
+                  "name": "content-length",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Applicant stage updated successfully\",\n  \"data\": {\n    \"id\": \"1eb1f256-52c5-4a5b-ba25-30af4e808326\",\n    \"name\": \"Lesmana Adh Kusuma\",\n    \"email\": \"lesmana.adh@example.com\",\n    \"phone\": \"081234567890\",\n    \"applied_position\": \"Back-End Engineer\",\n    \"stage\": \"INTERVIEW\",\n    \"notes\": \"Lolos seleksi berkas, diundang untuk wawancara teknis.\",\n    \"created_at\": \"2026-11-12T20:23:51.5096088+07:00\",\n    \"updated_at\": \"2026-11-12T20:25:49.6939769+07:00\"\n  }\n}",
+              "_postman_previewlanguage": "json"
+            }
+          ]
+        },
+        {
+          "name": "Update Applicant Stage (Invalid Stage - 400)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "description": "Menguji respon error (400 Bad Request) ketika stage yang diinput tidak terdapat dalam allowed enum stages.",
+            "url": {
+              "raw": "{{base_url}}/api/v1/applicants/:id/stage",
+              "protocol": "",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "applicants",
+                ":id",
+                "stage"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1eb1f256-52c5-4a5b-ba25-30af4e808326"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stage\": \"INVALID_STAGE_NAME\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "example",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "",
+                    "disabled": false,
+                    "type": "default"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/applicants/:id/stage",
+                  "protocol": "",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "applicants",
+                    ":id",
+                    "stage"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1eb1f256-52c5-4a5b-ba25-30af4e808326"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"stage\": \"INVALID_STAGE_NAME\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "access-control-allow-credentials",
+                  "value": "true",
+                  "name": "access-control-allow-credentials",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-headers",
+                  "value": "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With",
+                  "name": "access-control-allow-headers",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-methods",
+                  "value": "POST, OPTIONS, GET, PUT, PATCH, DELETE",
+                  "name": "access-control-allow-methods",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*",
+                  "name": "access-control-allow-origin",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8",
+                  "name": "content-type",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 12 Nov 2026 13:26:14 GMT",
+                  "name": "date",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "content-length",
+                  "value": "143",
+                  "name": "content-length",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Invalid recruitment stage. Allowed stages: [APPLIED SCREENING INTERVIEW TECHNICAL_TEST OFFERED ACCEPTED REJECTED]\"\n}",
+              "_postman_previewlanguage": "json"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "default"
+    },
+    {
+      "key": "applicant_id",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}

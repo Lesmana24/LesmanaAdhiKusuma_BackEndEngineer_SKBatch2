@@ -305,3 +305,4 @@ func TestHandler_UpdateApplicantStage(t *testing.T) {
 		assert.Equal(t, http.StatusNotFound, w.Code)
 	})
 }
+

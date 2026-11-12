@@ -225,3 +225,4 @@ func TestApplicantService_UpdateApplicantStage(t *testing.T) {
 		assert.Nil(t, updated)
 	})
 }
+

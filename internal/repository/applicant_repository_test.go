@@ -101,3 +101,4 @@ func TestApplicantRepository_CRUD(t *testing.T) {
 		assert.Equal(t, "Bambang Pamungkas", list[0].Name)
 	})
 }
+

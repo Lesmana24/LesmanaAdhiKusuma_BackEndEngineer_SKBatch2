@@ -185,7 +185,7 @@ Dari halaman ini Anda dapat mengecek spesifikasi skema data serta menguji seluru
 
 1. Buka aplikasi **Postman**.
 2. Klik tombol **Import**.
-3. Pilih file: `postman/SekolahKarir_Applicant_API.postman_collection.json`.
+3. Pilih file: `postman/SSekolah Karir - Applicant Records API.json`.
 4. Koleksi sudah dilengkapi dengan *pre-configured test script* yang secara otomatis menyimpan `applicant_id` baru ke dalam variable koleksi untuk mempermudah eksekusi request selanjutnya.
 
 ---
